@@ -4,7 +4,7 @@ from bson import ObjectId
 from fastapi import APIRouter
 
 from config.config import blog_collections
-from models.blog_model import BlogModel
+from models.blog_model import BlogModel, UpdatedBlogModel
 from serializer.blog import DecodeBlog, DecodeBlogs
 
 blog_root = APIRouter(tags=["blog"])
@@ -34,3 +34,10 @@ async def get_all_blogs():
     res = blog_collections.find()
     decoded_blog = DecodeBlogs(res)
     return {"status": "ok", "data": decoded_blog, "other_data": res}
+
+
+@blog_root.patch("/post/{_id}")
+def update_post(_id: str, blog: UpdatedBlogModel):
+    req = dict(blog.model_dump(exclude_unset=True))
+    blog_collections.find_one_and_update({"_id": ObjectId(_id)}, {"$set": req})
+    return {"status": "ok", "message": "Blog updated successfully"}
