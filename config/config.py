@@ -11,7 +11,7 @@ client = MongoClient(os.getenv("MONGO_URL"), server_api=ServerApi("1"))
 ""
 
 db = client.blogging
-collections = db["blogs"]
+blog_collections = db["blogs"]
 # Send a ping to confirm a successful connection
 try:
     client.admin.command("ping")
