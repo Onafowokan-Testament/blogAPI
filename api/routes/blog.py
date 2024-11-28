@@ -41,3 +41,10 @@ def update_post(_id: str, blog: UpdatedBlogModel):
     req = dict(blog.model_dump(exclude_unset=True))
     blog_collections.find_one_and_update({"_id": ObjectId(_id)}, {"$set": req})
     return {"status": "ok", "message": "Blog updated successfully"}
+
+
+@blog_root.delete("/posts/{_id}")
+def delete_blog(_id: str):
+    blog_collections.find_one_and_delete({"_id": ObjectId(_id)})
+
+    return {"status": "ok", "message": "successfuly deleted"}
